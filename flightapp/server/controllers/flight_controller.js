@@ -77,9 +77,72 @@ updateFlight = (req, res) => {
 
 
 }
-
-module.exports = {
-    createFlight,
-    updateFlight
-}
-
+deleteFlight = async (req, res) => {
+    (await Flight.findOneAndDelete({_id : req.params.id}, (err, flight) => {
+         if(err){
+             return res.status(400).json({
+                 success : false,
+                 message : 'Not deleted',
+                 error : err
+             });
+         }
+ 
+         if(!flight){
+             return res.status(404).json({message : 'Flight not found', success : false});
+         }
+ 
+         return res.status(200).json({message : 'Flight Deleted', success : true});
+     }).catch(err => console.error(err)));
+ }
+ 
+ getFlightByID = async (req, res) => {
+     await Flight.findOne({_id : req.params.id}, (err, flight) => {
+         if(err){
+             return res.status(400).json({error : err, success :false});
+         }
+         if(!flight){
+             return res.status(404).json({message : 'Flight Not found', success : false})
+         }
+         return res.status(200).json({success : true, data : flight});
+     }).catch(err => console.error(err));
+ }
+ 
+ getFlightByDestination = async (req, res) => {
+     console.log('hi');
+     await Flight.find({destination : 'DEL'}, (err, flights) => {
+         console.log('err');
+         if(err){
+             console.log(err);
+             return res.status(400).json({error : err, success :false});
+         }
+         if(!flights.length){
+             console.log('err');
+             return res.status(404).json({message : 'Flight Not found', success : false})
+         }
+         return res.status(200).json({success : true, data : flights});
+     }).catch(err => console.error(err));
+ }
+ 
+ getFlights = async (req, res) => {
+     await Flight.find({},(err, flights) => {
+         console.log('getflights');
+         if(err){
+             return res.status(400).json({error : err, success :false});
+         }
+         if(!flights.length){
+             return res.status(404).json({success : false, message : 'No Data Found'});
+         }
+ 
+         return res.status(200).json({success : true, data : flights});
+ 
+     }).clone().catch(err => console.error(err));
+ }
+ 
+ module.exports = {
+     createFlight,
+     updateFlight,
+     deleteFlight,
+     getFlightByID,
+     getFlightByDestination,
+     getFlights
+ }
