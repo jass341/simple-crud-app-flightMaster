@@ -104,13 +104,13 @@ deleteFlight = async (req, res) => {
              return res.status(404).json({message : 'Flight Not found', success : false})
          }
          return res.status(200).json({success : true, data : flight});
-     }).catch(err => console.error(err));
+     }).clone().catch(err => console.error(err));
  }
  
  getFlightByDestination = async (req, res) => {
-     console.log('hi');
-     await Flight.find({destination : 'DEL'}, (err, flights) => {
-         console.log('err');
+     console.log('hi des');
+     await Flight.find({destination : req.params.destination}, (err, flights) => {
+         
          if(err){
              console.log(err);
              return res.status(400).json({error : err, success :false});
@@ -120,8 +120,27 @@ deleteFlight = async (req, res) => {
              return res.status(404).json({message : 'Flight Not found', success : false})
          }
          return res.status(200).json({success : true, data : flights});
-     }).catch(err => console.error(err));
+     }).clone().catch(err => console.error(err));
  }
+
+ getFlightByDate = async (req, res) => {
+    console.log('hi date');
+    const startDate = new Date(req.params.date);
+    var endDate = new Date();
+    endDate.setDate(startDate.getDate() + 1);
+    await Flight.find({departure_time :{$gte : startDate, $lt : endDate} }, (err, flights) => {
+        
+        if(err){
+            console.log(err);
+            return res.status(400).json({error : err, success :false});
+        }
+        if(!flights.length){
+            console.log('err');
+            return res.status(404).json({message : 'Flight Not found', success : false})
+        }
+        return res.status(200).json({success : true, data : flights});
+    }).clone().catch(err => console.error(err));
+}
  
  getFlights = async (req, res) => {
      await Flight.find({},(err, flights) => {
@@ -144,5 +163,6 @@ deleteFlight = async (req, res) => {
      deleteFlight,
      getFlightByID,
      getFlightByDestination,
-     getFlights
+     getFlights,
+     getFlightByDate
  }
