@@ -55,6 +55,8 @@ const Button = styled.button.attrs({
     className: `btn btn-primary`,
 })`
     margin: 15px 15px 15px 5px;
+    background-color : var(--navBg);
+    border-color : var(--navBg);
 `
 
 const CancelButton = styled.a.attrs({
