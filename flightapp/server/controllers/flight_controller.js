@@ -78,7 +78,7 @@ updateFlight = (req, res) => {
 
 }
 deleteFlight = async (req, res) => {
-    (await Flight.findOneAndDelete({_id : req.params.id}, (err, flight) => {
+    (await Flight.findOneAndDelete({flight_number : req.params.id}, (err, flight) => {
          if(err){
              return res.status(400).json({
                  success : false,

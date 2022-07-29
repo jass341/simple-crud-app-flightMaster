@@ -13,4 +13,6 @@ router.get('/flight/destination/:destination', flightCtrl.getFlightByDestination
 router.get('/flight/date/:date', flightCtrl.getFlightByDate);
 router.get('/flight/:id', flightCtrl.getFlightByID);
 
+router.delete('/flight/:id', flightCtrl.deleteFlight);
+
 module.exports = router;
