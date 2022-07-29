@@ -21,7 +21,7 @@ const ParentWrapper = styled.div`
 padding: 0 40px 40px 40px;
 margin : 30px auto;
 width:90%;
-
+color : var(--navBg);
 margin-top : 30px;
 
 `
@@ -29,7 +29,9 @@ margin-top : 30px;
 const Wrapper = styled.div`
     padding: 0 40px 40px 40px;
     width : 100%;
-    
+    box-shadow : 1px 1px 20px 1px var(--navBg);
+    border-radius : 10px;
+    padding-top : 15px;
 
 `
 const Update = styled.div`
@@ -179,8 +181,10 @@ class FlightList extends Component {
             
            
             <ParentWrapper>
+            <Wrapper>
             <Container style={{marginTop : "30px", width : "70%"}}>
       <Form>
+      <Form.Label>Destination</Form.Label>
       <InputGroup className="mb-3">
         <Form.Control
           placeholder="Destination"
@@ -193,6 +197,7 @@ class FlightList extends Component {
           Search
         </Button>
       </InputGroup>
+      <Form.Label>Date</Form.Label>
       <InputGroup className="mb-3">
         <Form.Control
           placeholder="Date"
@@ -204,9 +209,9 @@ class FlightList extends Component {
         />
        <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
-        renderInput={(props) => <TextField {...props} style = {{width :"50em", background : "white", border : '0px solid '}}/>}
+        renderInput={(props) => <TextField {...props} style = {{width :"46em", background : "white", border : '0px solid '}}/>}
         value={value}
-        label = {' '}
+        label = {'-'}
         onChange={(newValue) => {
           this.setState({value : newValue, date : moment(newValue).format("yyyy-MM-DD")});
         }}
@@ -221,7 +226,7 @@ class FlightList extends Component {
      
       </Form>
     </Container>
-            <Wrapper>
+           
                 {showTable && (
                     <ReactTable 
                         data={flights}

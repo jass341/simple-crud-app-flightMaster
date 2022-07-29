@@ -14,8 +14,7 @@ const ParentWrapper = styled.div`
 padding: 0 40px 40px 40px;
 margin : 30px auto;
 width:80%;
-
-
+color : var(--navBg);
 
 `
 
