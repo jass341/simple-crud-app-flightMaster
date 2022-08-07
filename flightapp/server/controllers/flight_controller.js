@@ -1,5 +1,5 @@
 const Flight = require('../models/flight_master_model')
-
+const moment = require('moment');
 createFlight = (req, res) => {
     const body = req.body;
     if(!body){
@@ -78,7 +78,7 @@ updateFlight = (req, res) => {
 
 }
 deleteFlight = async (req, res) => {
-    (await Flight.findOneAndDelete({flight_number : req.params.id}, (err, flight) => {
+    (await Flight.findOneAndDelete({flight_number    : req.params.id}, (err, flight) => {
          if(err){
              return res.status(400).json({
                  success : false,
@@ -123,11 +123,30 @@ deleteFlight = async (req, res) => {
      }).clone().catch(err => console.error(err));
  }
 
+ getFlightByNumber = async (req, res) => {
+    console.log('hi des');
+    await Flight.find({flight_number : req.params.flight_number}, (err, flights) => {
+        
+        if(err){
+            console.log(err);
+            return res.status(400).json({error : err, success :false});
+        }
+        if(!flights.length){
+            console.log('err');
+            return res.status(404).json({message : 'Flight Not found', success : false})
+        }
+        return res.status(200).json({success : true, data : flights});
+    }).clone().catch(err => console.error(err));
+}
+
  getFlightByDate = async (req, res) => {
     console.log('hi date');
-    const startDate = new Date(req.params.date);
-    var endDate = new Date();
-    endDate.setDate(startDate.getDate() + 1);
+    const startDate = moment(req.params.date);
+    var endDate = moment(startDate).add(1 , 'days');
+    //endDate.setDate(startDate.getDate() + 1);
+    console.log(startDate)
+    console.log(endDate)
+    
     await Flight.find({departure_time :{$gte : startDate, $lt : endDate} }, (err, flights) => {
         
         if(err){
@@ -163,6 +182,7 @@ deleteFlight = async (req, res) => {
      deleteFlight,
      getFlightByID,
      getFlightByDestination,
+     getFlightByNumber,
      getFlights,
      getFlightByDate
  }

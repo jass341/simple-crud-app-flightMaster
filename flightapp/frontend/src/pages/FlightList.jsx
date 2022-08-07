@@ -71,6 +71,7 @@ class FlightList extends Component {
             columns: [],
             isLoading: false,
             destination : '',
+            flight_number : '',
             date : '',
             value : new Date()
         }
@@ -86,9 +87,23 @@ class FlightList extends Component {
             })
         })
     }
+    clearSearch = async () => {
+        this.setState({ isLoading: true })
+
+        await api.getAllFlights().then(flights => {
+            this.setState({
+                flights: flights.data.data,
+                isLoading: false,
+            })
+        })
+    }
     handleChangeInputdestination = async event =>{
         const destination = event.target.value;
         this.setState({destination : destination});
+    }
+    handleFlightNumberChange = async event =>{
+        const flight_number = event.target.value;
+        this.setState({flight_number : flight_number});
     }
 
     handleChangeInputDate = async event =>{
@@ -101,6 +116,16 @@ class FlightList extends Component {
         this.setState({ isLoading: true })
         const destination = this.state.destination;
         await api.getFlightByDestination(destination).then(flights => {
+            this.setState({
+                flights : flights.data.data,
+                isLoading : false
+            })
+        })
+    }
+    handleFlightSearch = async () => {
+        this.setState({ isLoading: true })
+        const flight_number = this.state.flight_number;
+        await api.getFlightByNumber(flight_number).then(flights => {
             this.setState({
                 flights : flights.data.data,
                 isLoading : false
@@ -126,7 +151,7 @@ class FlightList extends Component {
     }
 
     render() {
-        const { flights, isLoading, destination, date, value } = this.state
+        const { flights, isLoading, destination, date, value, flight_number } = this.state
         console.log('TCL: FlightList -> render -> movies', flights)
 
         const columns = [
@@ -184,7 +209,7 @@ class FlightList extends Component {
             <Wrapper>
             <Container style={{marginTop : "30px", width : "70%"}}>
       <Form>
-      <Form.Label>Destination</Form.Label>
+      <Form.Label style={{fontWeight : "900"}}>Destination</Form.Label>
       <InputGroup className="mb-3">
         <Form.Control
           placeholder="Destination"
@@ -194,10 +219,10 @@ class FlightList extends Component {
           onChange={this.handleChangeInputdestination}
         />
         <Button variant="primary" id="button-addon2" onClick={this.handleDestinationSearch} style={{background: "var(--navBg)"}}>
-          Search
+          Run Query
         </Button>
       </InputGroup>
-      <Form.Label>Date</Form.Label>
+      <Form.Label style={{fontWeight : "900"}}>Date</Form.Label>
       <InputGroup className="mb-3">
         <Form.Control
           placeholder="Date"
@@ -209,9 +234,9 @@ class FlightList extends Component {
         />
        <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
-        renderInput={(props) => <TextField {...props} style = {{width :"46em", background : "white", border : '0px solid '}}/>}
+        renderInput={(props) => <TextField {...props} style = {{width :"45em", background : "white"}}/>}
         value={value}
-        label = {'-'}
+        //label = {'-'}
         onChange={(newValue) => {
           this.setState({value : newValue, date : moment(newValue).format("yyyy-MM-DD")});
         }}
@@ -220,10 +245,26 @@ class FlightList extends Component {
       />
     </LocalizationProvider>
         <Button variant="primary" id="button-addon2" style={{background: "var(--navBg)"}} onClick={this.handleDateSearch}>
-          Search
+        Run Query
         </Button>
       </InputGroup>
-     
+      <Form.Label style={{fontWeight : "900"}}>Flight Number</Form.Label>
+      <InputGroup className="mb-3">
+        <Form.Control
+          placeholder="Flight number"
+          aria-label="number"
+          aria-describedby="basic-addon2"
+          value={flight_number}
+          onChange={this.handleFlightNumberChange}
+        />
+        <Button variant="primary" id="button-addon2" onClick={this.handleFlightSearch} style={{background: "var(--navBg)"}}>
+          Run Query
+        </Button>
+      </InputGroup>
+      <Button variant="primary" id="button-addon2" onClick={this.clearSearch} style={{background: "var(--navBg)", marginBottom:"10px"}}>
+          Clear Filter
+        </Button>
+        <br/>
       </Form>
     </Container>
            

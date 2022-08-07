@@ -36,6 +36,7 @@ const Wrapper = styled.div.attrs({
 
 const Label = styled.label`
     margin: 5px;
+    font-weight: 900;
 `
 
 const InputText = styled.input.attrs({

@@ -9,6 +9,7 @@ export const insertFlight = flight => api.post(`/flight`, flight);
 export const getAllFlights = () => api.get(`/flights`);
 export const getFlightByID = id => api.get(`/flight/${id}`);
 export const getFlightByDestination = destination => api.get(`/flight/destination/${destination}`);
+export const getFlightByNumber = flight_number => api.get(`/flight/number/${flight_number}`);
 export const getFlightByDate = date => api.get(`/flight/date/${date}`);
 
 export const updateFlightByID = (id, flight) => api.put(`/flight/${id}`, flight);
@@ -17,7 +18,7 @@ export const deleteFlightByID = id => api.delete(`/flight/${id}`);
 
 const apis = {
     insertFlight,
-    getAllFlights, getFlightByDate, getFlightByDestination, getFlightByID,
+    getAllFlights, getFlightByDate, getFlightByDestination, getFlightByID, getFlightByNumber,
     updateFlightByID,
     deleteFlightByID
 }
